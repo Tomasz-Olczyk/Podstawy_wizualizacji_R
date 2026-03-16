@@ -1,0 +1,37 @@
+---
+title: "Flipbookr z wyborem kodu"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(flipbookr)
+library(shiny)
+library(tidyverse)
+```
+
+
+```{r}
+selectInput("kod_flip", "Wybierz kod do podglądu:", choices = c(
+  "kod1", "kod2"
+))
+```
+
+
+```{r}
+renderUI({
+  code1 <- "ggplot(mtcars, aes(hp, mpg)) + geom_point()"
+  code2 <- "ggplot(mtcars, aes(factor(cyl), mpg)) + geom_boxplot()"
+  
+  kod <- switch(input$kod_flip,
+                "kod1" = code1,
+                "kod2" = code2)
+  
+  flipbookr::chunk_reveal(code = kod)
+})
+
+```
+

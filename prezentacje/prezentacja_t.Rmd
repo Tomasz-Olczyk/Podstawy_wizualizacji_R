@@ -1,0 +1,45 @@
+---
+title: "Interaktywny wykres w xaringan"
+output:
+  html_document:
+    df_print: paged
+  xaringan::moon_reader:
+    css: default
+    self_contained: yes
+runtime: shiny
+---
+
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(shiny)
+```
+
+```{r}
+selectInput("kod_plot", "Wybierz kod wykresu:", choices = c(
+  "ggplot(mtcars, aes(mpg, wt)) + geom_point()",
+  "ggplot(mtcars, aes(factor(cyl), mpg)) + geom_boxplot()",
+  "ggplot(mtcars, aes(hp)) + geom_histogram(bins = 10)"
+))
+
+
+```
+
+```{r}
+
+renderText({
+  paste0("```r\n", input$kod_plot, "\n```")
+})
+
+```
+
+
+
+```{r, echo = FALSE}
+
+renderPlot({
+  eval(parse(text = input$kod_plot))
+})
+
+```
+
